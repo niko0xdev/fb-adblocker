@@ -1,0 +1,23 @@
+{
+  "name": "KongFbAdBlocker",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "Simple FB ads blocker",
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": "enabled.png"
+  },
+  "background": {
+    "scripts": ["index.js"]
+  },
+  "icons": {
+    "16": "enabled.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.facebook.com/*"],
+      "js": ["index.js"]
+    }
+  ],
+  "permissions": ["activeTab"]
+}
