@@ -24,6 +24,10 @@
       'div[data-pagelet="RightRail"] > div'
     );
 
+    if (feedItems.length > 1) {
+      feedItems[0].remove();
+    }
+
     feedItems.forEach((feed) => {
       const sponsorElm = feed.querySelector("a");
       if (sponsorElm && /\/gaming\/.*/g.exec(sponsorElm.href)) {
