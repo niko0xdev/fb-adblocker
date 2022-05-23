@@ -1,62 +1,57 @@
 (function () {
   "use strict";
 
-  var feedGarbageTextPatterns = [
+  var garbageTextPatterns = [
+    /Sponsored/gi,
     /Suggested\sfor\syou/gi,
     /Reels\sand\sshort\svideos/gi,
     /r\no\ns\ne\nd\nS\no\nt\nc\np\n0\nh\nd\na\ne\no\na\nS\ns\n1\ng\nr\no\nn\ng\n9\nu\n1\nf\n1/gi,
   ];
+
+  var garbageInnerSelectors = ['a[aria-label="Sponsored"]'];
 
   var mutationObserver =
     window.MutationObserver ||
     window.WebKitMutationObserver ||
     window.MozMutationObserver;
 
-  function removeContentSponsors() {
-    const feedItems = document.querySelectorAll(
-      'div[role="feed"] > div[data-pagelet]'
-    );
-    feedItems.forEach((feed) => {
-      const sponsorElm = feed.querySelector('a[aria-label="Sponsored"]');
-      if (sponsorElm) {
-        console.log("===> remove sponsored content...");
-        feed.remove();
-      }
-    });
-  }
-
-  function removePanelSponsors() {
-    const feedItems = document.querySelectorAll(
-      'div[data-pagelet="RightRail"] > div'
-    );
-
-    if (feedItems.length > 1) {
-      feedItems[0].remove();
+  function removeElem(elm) {
+    if (elm) {
+      console.log("Remove element");
+      elm.remove();
     }
+  }
 
-    feedItems.forEach((feed) => {
-      const sponsorElm = feed.querySelector("a");
-      if (sponsorElm && /\/gaming\/.*/g.exec(sponsorElm.href)) {
-        console.log("===> remove sponsored gaming: ", sponsorElm.href);
-        feed.remove();
+  function removeByInnerText(selector) {
+    const elements = document.querySelectorAll(selector);
+
+    elements.forEach((elm) => {
+      if (garbageTextPatterns.some((rgx) => rgx.test(elm.innerText))) {
+        removeElem(elm);
       }
     });
   }
 
-  function removeFeedSponsors() {
-    const feedItems = document.querySelectorAll('div[role="feed"] > div');
+  function removeByInnerSelector(selector) {
+    const elements = document.querySelectorAll(selector);
 
-    feedItems.forEach((d) => {
-      if (feedGarbageTextPatterns.some((p) => p.test(d.innerText))) {
-        d.remove();
-      }
+    elements.forEach((elm) => {
+      garbageInnerSelectors.forEach((s) => {
+        const matchElms = elm.querySelector(s);
+
+        if (matchElms) {
+          matchElms.forEach((selm) => removeElem(selm));
+        }
+      });
     });
   }
 
   function process() {
-    removeContentSponsors();
-    removePanelSponsors();
-    removeFeedSponsors();
+    removeByInnerSelector('div[role="feed"] > div[data-pagelet]');
+    removeByInnerText('div[role="feed"] > div');
+    removeByInnerText(
+      'div[role="complementary"] > div > div > div > div > div'
+    );
   }
 
   if (mutationObserver) {
