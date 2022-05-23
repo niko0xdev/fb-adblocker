@@ -1,6 +1,12 @@
 (function () {
   "use strict";
 
+  var feedGarbageTextPatterns = [
+    /Suggested\sfor\syou/gi,
+    /Reels\sand\sshort\svideos/gi,
+    /r\no\ns\ne\nd\nS\no\nt\nc\np\n0\nh\nd\na\ne\no\na\nS\ns\n1\ng\nr\no\nn\ng\n9\nu\n1\nf\n1/gi,
+  ];
+
   var mutationObserver =
     window.MutationObserver ||
     window.WebKitMutationObserver ||
@@ -37,9 +43,20 @@
     });
   }
 
+  function removeFeedSponsors() {
+    const feedItems = document.querySelectorAll('div[role="feed"] > div');
+
+    feedItems.forEach((d) => {
+      if (feedGarbageTextPatterns.some((p) => p.test(d.innerText))) {
+        d.remove();
+      }
+    });
+  }
+
   function process() {
     removeContentSponsors();
     removePanelSponsors();
+    removeFeedSponsors();
   }
 
   if (mutationObserver) {
