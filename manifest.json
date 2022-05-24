@@ -1,8 +1,8 @@
 {
-  "name": "KongFbAdBlocker",
+  "name": "TwitterAdBlocker",
   "version": "0.1",
   "manifest_version": 2,
-  "description": "Simple FB ads blocker",
+  "description": "Simple Twitter ads blocker",
   "browser_action": {
     "browser_style": true,
     "default_icon": "enabled.png"
@@ -15,7 +15,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*.facebook.com/*"],
+      "matches": ["https://*.twitter.com/*"],
       "js": ["index.js"]
     }
   ],

@@ -4,8 +4,7 @@
   var garbageTextPatterns = [
     /Sponsored/gi,
     /Suggested\sfor\syou/gi,
-    /Reels\sand\sshort\svideos/gi,
-    /r\no\ns\ne\nd\nS\no\nt\nc\np\n0\nh\nd\na\ne\no\na\nS\ns\n1\ng\nr\no\nn\ng\n9\nu\n1\nf\n1/gi,
+    /Promoted/gi,
   ];
 
   var garbageInnerSelectors = ['a[aria-label="Sponsored"]'];
@@ -47,11 +46,7 @@
   }
 
   function process() {
-    removeByInnerSelector('div[role="feed"] > div[data-pagelet]');
-    removeByInnerText('div[role="feed"] > div');
-    removeByInnerText(
-      'div[role="complementary"] > div > div > div > div > div'
-    );
+    removeByInnerText('data-testid="cellInnerDiv"');
   }
 
   if (mutationObserver) {
